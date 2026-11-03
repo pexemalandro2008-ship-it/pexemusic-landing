@@ -255,6 +255,8 @@ function Features() {
 function VideoShowcase() {
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const userPaused = useRef(false);
   const toggleSound = () => {
     const v = ref.current;
     if (!v) return;
@@ -262,14 +264,26 @@ function VideoShowcase() {
     v.muted = next;
     if (!next) {
       v.currentTime = 0;
+      userPaused.current = false;
       v.play().catch(() => {});
     }
     setMuted(next);
   };
+  const togglePlay = () => {
+    const v = ref.current;
+    if (!v) return;
+    if (v.paused) {
+      userPaused.current = false;
+      v.play().catch(() => {});
+    } else {
+      userPaused.current = true;
+      v.pause();
+    }
+  };
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.4 });
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? !userPaused.current && v.play().catch(() => {}) : v.pause()), { threshold: 0.4 });
     io.observe(v);
     return () => io.disconnect();
   }, []);
@@ -279,11 +293,26 @@ function VideoShowcase() {
         <div className="reveal order-2 mx-auto lg:order-1">
           <div className="relative w-[260px] rounded-[2.6rem] border-[10px] border-[#0d1426] bg-black shadow-2xl shadow-brand/40 ring-1 ring-white/15 sm:w-[300px]">
             <div className="absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-[#0d1426]" />
-            <video ref={ref} src={media("promo.mp4")} poster={media("promo.webp")} muted loop playsInline preload="metadata" onClick={toggleSound} className="aspect-[9/16] w-full cursor-pointer rounded-[2rem] object-cover" />
+            <video ref={ref} src={media("promo.mp4")} poster={media("promo.webp")} muted loop playsInline preload="metadata" onClick={togglePlay} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} className="aspect-[9/16] w-full cursor-pointer rounded-[2rem] object-cover" />
+            {!playing && (
+              <button onClick={togglePlay} aria-label="Reproduzir vídeo" className="absolute left-1/2 top-1/2 z-10 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-abyss shadow-2xl transition hover:scale-110">
+                <svg viewBox="0 0 24 24" className="ml-1 h-9 w-9" fill="currentColor" aria-hidden><path d="M7 4v16l13-8z" /></svg>
+              </button>
+            )}
+            <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+            <button
+              onClick={togglePlay}
+              aria-label={playing ? "Pausar vídeo" : "Reproduzir vídeo"}
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-abyss/70 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-abyss/90"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+                {playing ? <path d="M6 4h4v16H6zM14 4h4v16h-4z" /> : <path d="M7 4v16l13-8z" />}
+              </svg>
+            </button>
             <button
               onClick={toggleSound}
               aria-label={muted ? "Ativar som" : "Desativar som"}
-              className={`absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold shadow-lg backdrop-blur transition ${muted ? "bg-white text-abyss hover:scale-105" : "bg-abyss/70 text-white/90 ring-1 ring-white/20"}`}
+              className={`relative flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold shadow-lg backdrop-blur transition ${muted ? "bg-white text-abyss hover:scale-105" : "bg-abyss/70 text-white/90 ring-1 ring-white/20"}`}
             >
               {muted && <span className="absolute inset-0 -z-10 rounded-full bg-white animate-pulseRing" aria-hidden />}
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -292,6 +321,7 @@ function VideoShowcase() {
               </svg>
               {muted ? "Toque para ouvir" : "Som ligado"}
             </button>
+            </div>
           </div>
         </div>
         <div className="reveal order-1 lg:order-2">
