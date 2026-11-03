@@ -1,5 +1,5 @@
 // ⚙️ CONFIGURAÇÃO RÁPIDA — edite aqui e o site inteiro atualiza
-export const WHATSAPP_NUMBER = "5500000000000"; // DDI + DDD + número, só dígitos. Ex: 5511999998888
+export const WHATSAPP_NUMBER = "5518991703108"; // DDI + DDD + número, só dígitos
 export const PRICE_FROM = "15"; // "a partir de R$ X/mês"
 export const INSTAGRAM_URL = ""; // opcional: https://instagram.com/seuperfil
 
