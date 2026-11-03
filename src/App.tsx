@@ -254,6 +254,18 @@ function Features() {
 
 function VideoShowcase() {
   const ref = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+  const toggleSound = () => {
+    const v = ref.current;
+    if (!v) return;
+    const next = !muted;
+    v.muted = next;
+    if (!next) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    }
+    setMuted(next);
+  };
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
@@ -267,7 +279,19 @@ function VideoShowcase() {
         <div className="reveal order-2 mx-auto lg:order-1">
           <div className="relative w-[260px] rounded-[2.6rem] border-[10px] border-[#0d1426] bg-black shadow-2xl shadow-brand/40 ring-1 ring-white/15 sm:w-[300px]">
             <div className="absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-[#0d1426]" />
-            <video ref={ref} src={media("promo.mp4")} poster={media("promo.webp")} muted loop playsInline preload="metadata" className="aspect-[9/16] w-full rounded-[2rem] object-cover" />
+            <video ref={ref} src={media("promo.mp4")} poster={media("promo.webp")} muted loop playsInline preload="metadata" onClick={toggleSound} className="aspect-[9/16] w-full cursor-pointer rounded-[2rem] object-cover" />
+            <button
+              onClick={toggleSound}
+              aria-label={muted ? "Ativar som" : "Desativar som"}
+              className={`absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold shadow-lg backdrop-blur transition ${muted ? "bg-white text-abyss hover:scale-105" : "bg-abyss/70 text-white/90 ring-1 ring-white/20"}`}
+            >
+              {muted && <span className="absolute inset-0 -z-10 rounded-full bg-white animate-pulseRing" aria-hidden />}
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" />
+                {muted ? <path d="m22 9-6 6m0-6 6 6" /> : <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" />}
+              </svg>
+              {muted ? "Toque para ouvir" : "Som ligado"}
+            </button>
           </div>
         </div>
         <div className="reveal order-1 lg:order-2">
