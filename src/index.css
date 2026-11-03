@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-abyss text-white font-sans antialiased; }
+  ::selection { background: #3fd0ff; color: #030a1f; }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+  .eyebrow { @apply inline-flex items-center gap-2 rounded-full border border-brand-light/25 bg-brand-light/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-brand-glow; }
+  .h2 { @apply font-display text-3xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl; }
+  .text-grad { @apply bg-gradient-to-r from-brand-light via-brand-glow to-white bg-clip-text text-transparent; }
+  .btn-zap { @apply relative inline-flex items-center justify-center gap-3 rounded-full bg-zap px-7 py-4 font-display text-base font-bold text-abyss shadow-[0_10px_40px_-8px_rgba(37,211,102,.7)] transition hover:-translate-y-0.5 hover:bg-[#2ee672] active:translate-y-0; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-4 font-display text-base font-semibold text-white backdrop-blur transition hover:border-brand-light/60 hover:bg-white/10; }
+  .card { @apply rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] backdrop-blur-sm; }
+}
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+.bg-ocean-glow {
+  background:
+    radial-gradient(60% 50% at 75% 20%, rgba(30,123,255,.35), transparent 70%),
+    radial-gradient(50% 40% at 10% 60%, rgba(63,208,255,.16), transparent 70%),
+    linear-gradient(180deg, #030a1f 0%, #061433 55%, #030a1f 100%);
+}
+.grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
