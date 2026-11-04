@@ -439,8 +439,8 @@ function HowItWorks() {
 const PLANS = [
   { months: 1, name: "Mensal", tag: "Liberdade todo mês", price: "15", cents: "00", period: "por mês", perMonth: "", best: false },
   { months: 3, name: "Trimestral", tag: "Mais música por mais tempo", price: "39", cents: "90", period: "a cada 3 meses", perMonth: "13,30", best: false },
-  { months: 6, name: "Semestral", tag: "Mais economia pra você", price: "69", cents: "90", period: "a cada 6 meses", perMonth: "11,65", best: false },
-  { months: 12, name: "Anual", tag: "1 ano de música sem limites", price: "150", cents: "00", period: "a cada 12 meses", perMonth: "12,50", best: true },
+  { months: 6, name: "Semestral", tag: "Mais economia pra você", price: "77", cents: "90", period: "a cada 6 meses", perMonth: "12,98", best: false },
+  { months: 12, name: "Anual", tag: "1 ano de música sem limites", price: "150", cents: "00", period: "a cada 12 meses", perMonth: "12,50", best: true, was: "180,00", save: "30" },
 ];
 
 function Pricing() {
@@ -475,8 +475,14 @@ function Pricing() {
                   <span className="text-6xl font-extrabold leading-none tracking-tighter">{p.price}</span>
                   <span className="mt-1 text-2xl font-extrabold">,{p.cents}</span>
                 </div>
-                <p className="mt-2 text-sm text-white/70">{p.period}</p>
-                <p className="h-5 text-sm font-semibold text-brand-light">{p.perMonth && `R$ ${p.perMonth} por mês`}</p>
+                <p className="mt-2 text-sm text-white/70">
+                  {p.was && <s className="mr-2 text-white/40">R$ {p.was}</s>}
+                  {p.period}
+                </p>
+                <p className="flex min-h-5 flex-wrap items-center gap-2 text-sm font-semibold text-brand-light">
+                  {p.perMonth && `R$ ${p.perMonth} por mês`}
+                  {p.save && <span className="rounded-full bg-zap/15 px-2 py-0.5 text-xs font-extrabold text-zap">Economize R$ {p.save}</span>}
+                </p>
                 <ul className="mt-5 grid gap-2.5">
                   {perks.map((k) => (
                     <li key={k} className="flex items-center gap-2.5 text-sm text-white/85"><Ico d={I.check} c="h-4 w-4 shrink-0 text-zap" />{k}</li>
@@ -497,7 +503,7 @@ function Pricing() {
 function Faq() {
   const q = [
     ["Como eu assino o PexeMusic?", "É só clicar em qualquer botão verde da página. Você cai direto no nosso WhatsApp, escolhe o plano e recebe o acesso rapidinho."],
-    ["Quanto custa?", `Os planos começam em R$${PRICE_FROM} por mês. Também tem trimestral (R$39,90), semestral (R$69,90) e anual (R$150): quanto mais tempo, menos você paga por mês.`],
+    ["Quanto custa?", `Os planos começam em R$${PRICE_FROM} por mês. Também tem trimestral (R$39,90), semestral (R$77,90) e anual (R$150): quanto mais tempo, menos você paga por mês.`],
     ["Funciona sem internet?", "Sim! Você baixa suas músicas e playlists no aparelho e ouve offline, sem gastar dados."],
     ["Em quais aparelhos funciona?", "Celular, computador, tablet e Smart TV. Você usa sua conta nos seus dispositivos."],
     ["Tem anúncio?", "Não. Nenhum. Nem no meio da música, nem entre uma faixa e outra."],
