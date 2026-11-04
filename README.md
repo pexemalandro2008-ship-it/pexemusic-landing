@@ -16,4 +16,4 @@ npm run dev
 ```
 
 ## Deploy
-`.github/workflows/deploy.yml` publica no GitHub Pages a cada push na `main` (precisa ativar Pages em Settings → Pages → Source: GitHub Actions).
+Publicado no Cloudflare Pages (projeto `pexemusic`, https://pexemusic.pages.dev): cada push na `main` gera um deploy automático (build `npm run build`, saída `dist`).
