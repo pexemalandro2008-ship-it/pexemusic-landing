@@ -52,8 +52,8 @@ const Eq = ({ bars = 5, c = "bg-brand-light" }: { bars?: number; c?: string }) =
   </span>
 );
 
-const ZapButton = ({ children, msg, className = "" }: { children: ReactNode; msg?: string; className?: string }) => (
-  <a href={waLink(msg)} target="_blank" rel="noopener" className={`btn-zap ${className}`}>
+const ZapButton = ({ children, msg, className = "", plan, value }: { children: ReactNode; msg?: string; className?: string; plan?: string; value?: number }) => (
+  <a href={waLink(msg)} target="_blank" rel="noopener" data-plan={plan} data-value={value} className={`btn-zap ${className}`}>
     {I.zap("h-6 w-6")}
     {children}
   </a>
@@ -489,7 +489,7 @@ function Pricing() {
                   ))}
                 </ul>
                 <div className="flex-1" />
-                <ZapButton className={`mt-7 w-full !gap-2 !px-4 !py-3.5 !text-sm ${p.best ? "" : "!bg-white/10 !text-white !shadow-none hover:!bg-zap hover:!text-abyss"}`} msg={`Oi! Quero assinar o plano ${p.name} do PexeMusic (R$${p.price},${p.cents}) 🎵`}>Assinar {p.name}</ZapButton>
+                <ZapButton className={`mt-7 w-full !gap-2 !px-4 !py-3.5 !text-sm ${p.best ? "" : "!bg-white/10 !text-white !shadow-none hover:!bg-zap hover:!text-abyss"}`} plan={p.name} value={Number(`${p.price}.${p.cents}`)} msg={`Oi! Quero assinar o plano ${p.name} do PexeMusic (R$${p.price},${p.cents}) 🎵`}>Assinar {p.name}</ZapButton>
               </div>
             </div>
           ))}
