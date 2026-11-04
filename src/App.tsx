@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { PRICE_FROM, media, waLink } from "./config";
+import Player, { MEDIA_EVENT, announce } from "./Player";
+import { HorizontalScroll, Parallax, ScrollProgress, WordReveal, useScrollVar } from "./Scroll";
 
 /* ---------- ícones (SVG inline, sem dependência) ---------- */
 const I = {
@@ -88,6 +90,7 @@ function Nav() {
           </span>
         </a>
         <nav className="hidden items-center gap-8 text-sm text-white/70 md:flex">
+          <a href="#ouvir" className="hover:text-white">Ouvir</a>
           <a href="#recursos" className="hover:text-white">Recursos</a>
           <a href="#como" className="hover:text-white">Como funciona</a>
           <a href="#planos" className="hover:text-white">Planos</a>
@@ -102,11 +105,15 @@ function Nav() {
 }
 
 function Hero() {
+  const ref = useScrollVar<HTMLElement>("exit");
   return (
-    <section id="topo" className="grain relative overflow-hidden bg-ocean-glow pb-20 pt-28 sm:pt-36">
+    <section id="topo" ref={ref} className="grain relative overflow-hidden bg-ocean-glow pb-20 pt-28 sm:pt-36">
       <Bubbles />
       <div className="container-x relative grid items-center gap-14 lg:grid-cols-[1.1fr_.9fr]">
-        <div className="reveal">
+        <div
+          className=""
+          style={{ translate: "0 calc(var(--p,0) * 100px)", opacity: "calc(1 - var(--p,0) * 1.1)", scale: "calc(1 - var(--p,0) * 0.08)" }}
+        >
           <span className="eyebrow"><Eq bars={4} /> Seu app de música em um só lugar</span>
           <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
             Toda música.<br />
@@ -136,7 +143,10 @@ function Hero() {
           </div>
         </div>
 
-        <div className="reveal relative mx-auto w-full max-w-md lg:max-w-none">
+        <div
+          className="relative mx-auto w-full max-w-md lg:max-w-none"
+          style={{ translate: "0 calc(var(--p,0) * -60px)", rotate: "calc(var(--p,0) * -4deg)", scale: "calc(1 + var(--p,0) * 0.06)" }}
+        >
           <div className="absolute -inset-10 rounded-full bg-brand/30 blur-3xl" aria-hidden />
           <img src={media("app.webp")} alt="App PexeMusic aberto no celular e na TV" className="relative w-full rounded-[2rem] shadow-2xl shadow-brand/30 ring-1 ring-white/10 animate-float" />
           {/* card flutuante "tocando agora" */}
@@ -263,6 +273,7 @@ function VideoShowcase() {
     const next = !muted;
     v.muted = next;
     if (!next) {
+      announce("video");
       v.currentTime = 0;
       userPaused.current = false;
       v.play().catch(() => {});
@@ -283,9 +294,19 @@ function VideoShowcase() {
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
+    const onMedia = (e: Event) => {
+      if ((e as CustomEvent).detail === "player" && !v.muted) {
+        v.muted = true;
+        setMuted(true);
+      }
+    };
+    window.addEventListener(MEDIA_EVENT, onMedia);
     const io = new IntersectionObserver(([e]) => (e.isIntersecting ? !userPaused.current && v.play().catch(() => {}) : v.pause()), { threshold: 0.4 });
     io.observe(v);
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      window.removeEventListener(MEDIA_EVENT, onMedia);
+    };
   }, []);
   return (
     <section className="grain relative overflow-hidden bg-ocean-glow py-24">
@@ -351,7 +372,11 @@ function Moments() {
       <div className="container-x grid items-center gap-12 lg:grid-cols-2">
         <div className="reveal relative">
           <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-brand/40 to-transparent blur-2xl" aria-hidden />
-          <img src={media("relax.webp")} alt="Mulher relaxando no sofá ouvindo música com fones" loading="lazy" className="relative aspect-[4/5] w-full rounded-[2rem] object-cover ring-1 ring-white/10" />
+          <div className="relative overflow-hidden rounded-[2rem] ring-1 ring-white/10">
+            <Parallax amount={90}>
+              <img src={media("relax.webp")} alt="Mulher relaxando no sofá ouvindo música com fones" loading="lazy" className="aspect-[4/5] w-full scale-110 object-cover" />
+            </Parallax>
+          </div>
           <div className="card absolute bottom-5 left-5 right-5 flex items-center justify-between bg-abyss/70 p-4 backdrop-blur-xl">
             <div>
               <p className="text-xs uppercase tracking-widest text-brand-glow">Playlist · Relax</p>
@@ -559,16 +584,61 @@ function FloatingZap() {
   );
 }
 
+function Genres() {
+  const g = [
+    ["Sertanejo", "🤠", "#f59e0b", "#b45309"],
+    ["Funk", "🔊", "#ec4899", "#7c3aed"],
+    ["Pop", "✨", "#3fd0ff", "#1e7bff"],
+    ["Trap", "🔥", "#ef4444", "#7f1d1d"],
+    ["Pagode", "🥁", "#22c55e", "#0f766e"],
+    ["Gospel", "🙏", "#fde68a", "#d97706"],
+    ["Rock", "🎸", "#64748b", "#0f172a"],
+    ["Eletrônica", "🎧", "#a855f7", "#1e3a8a"],
+    ["MPB", "🌴", "#14b8a6", "#1e7bff"],
+    ["Internacionais", "🌎", "#6366f1", "#0b2a6b"],
+  ];
+  return (
+    <HorizontalScroll
+      count={g.length}
+      header={
+        <div className="max-w-2xl">
+          <span className="eyebrow">Catálogo</span>
+          <h2 className="h2 mt-5">Do modão ao trap. <span className="text-grad">Tem pra todo mundo.</span></h2>
+        </div>
+      }
+    >
+      {g.map(([name, emoji, a, b]) => (
+        <div
+          key={name}
+          className="relative flex h-[300px] w-[230px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl p-6 shadow-2xl ring-1 ring-white/10 sm:h-[360px] sm:w-[280px]"
+          style={{ background: `linear-gradient(150deg, ${a}, ${b})` }}
+        >
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" aria-hidden />
+          <span className="text-5xl">{emoji}</span>
+          <div className="relative">
+            <p className="font-display text-3xl font-extrabold drop-shadow">{name}</p>
+            <p className="mt-1 flex items-center gap-2 text-sm font-semibold text-white/80"><Eq bars={3} c="bg-white" /> Playlists liberadas</p>
+          </div>
+        </div>
+      ))}
+    </HorizontalScroll>
+  );
+}
+
 export default function App() {
   useReveal();
   return (
     <>
+      <ScrollProgress />
       <Nav />
       <main>
         <Hero />
         <Marquee />
+        <WordReveal text="Sem anúncio. Sem internet? Sem problema. Só você e a música que você ama." accent={["anúncio", "problema", "música"]} />
         <Problem />
+        <Player />
         <Features />
+        <Genres />
         <VideoShowcase />
         <Moments />
         <HowItWorks />
