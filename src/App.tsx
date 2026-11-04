@@ -436,59 +436,59 @@ function HowItWorks() {
   );
 }
 
+const PLANS = [
+  { months: 1, name: "Mensal", tag: "Liberdade todo mês", price: "15", cents: "00", period: "por mês", perMonth: "", best: false },
+  { months: 3, name: "Trimestral", tag: "Mais música por mais tempo", price: "39", cents: "90", period: "a cada 3 meses", perMonth: "13,30", best: false },
+  { months: 6, name: "Semestral", tag: "Mais economia pra você", price: "69", cents: "90", period: "a cada 6 meses", perMonth: "11,65", best: false },
+  { months: 12, name: "Anual", tag: "1 ano de música sem limites", price: "150", cents: "00", period: "a cada 12 meses", perMonth: "12,50", best: true },
+];
+
 function Pricing() {
-  const perks = ["Milhões de músicas liberadas", "Sem nenhum anúncio", "Download para ouvir offline", "Celular, computador, tablet e TV", "Playlists personalizadas", "Suporte direto no WhatsApp"];
+  const perks = ["Acesso completo", "Ouça offline", "Em todos os dispositivos", "Suas playlists"];
   return (
     <section id="planos" className="grain relative overflow-hidden bg-ocean-glow py-24">
       <Bubbles />
-      <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1fr_1.05fr]">
-        <div className="reveal">
+      <div className="container-x relative">
+        <div className="reveal mx-auto max-w-2xl text-center">
           <span className="eyebrow">Planos</span>
-          <h2 className="h2 mt-5">Menos que um lanche. <span className="text-grad">Música o mês inteiro.</span></h2>
-          <p className="mt-5 max-w-lg text-lg text-white/65">
-            Por menos de R$0,50 por dia você ouve o que quiser, quando quiser, sem propaganda. E tem plano com desconto pra quem fecha por mais tempo.
-          </p>
-          <div className="mt-8 flex items-center gap-4 text-sm text-white/60">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-zap/15 text-zap">{I.zap("h-6 w-6")}</span>
-            <p>Fale com a gente e descubra os planos <b className="text-white">trimestral, semestral e anual</b> com preço ainda menor.</p>
-          </div>
+          <h2 className="h2 mt-5">Escolha o seu. <span className="text-grad">Música o tempo todo.</span></h2>
+          <p className="mt-5 text-lg text-white/65">Todos os planos têm acesso completo, sem anúncio, offline e em todos os seus aparelhos. Quanto mais tempo, menos você paga por mês.</p>
         </div>
 
-        <div className="reveal relative">
-          <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-to-br from-brand-light via-brand to-zap opacity-70 blur-lg" aria-hidden />
-          <div className="relative rounded-[2rem] border border-white/15 bg-abyss/90 p-8 backdrop-blur-xl sm:p-10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img src={media("logo.webp")} alt="" className="h-12 w-12 rounded-2xl" />
-                <div>
-                  <p className="font-display text-lg font-extrabold">PexeMusic Premium</p>
-                  <p className="text-sm text-white/50">Acesso completo</p>
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {PLANS.map((p) => (
+            <div key={p.name} className="reveal relative">
+              {p.best && <div className="absolute -inset-[3px] rounded-[1.9rem] bg-gradient-to-br from-brand-light via-brand to-zap opacity-80 blur-md" aria-hidden />}
+              <div className={`relative flex h-full flex-col rounded-[1.75rem] border p-6 backdrop-blur-xl ${p.best ? "border-brand-light/70 bg-abyss/95" : "border-white/10 bg-abyss/80"}`}>
+                {p.best && (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-amber-300 to-yellow-400 px-4 py-1 text-xs font-extrabold uppercase tracking-wider text-abyss shadow-lg">👑 Melhor oferta</span>
+                )}
+                <div className="flex items-center gap-3">
+                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border font-display text-lg font-extrabold ${p.best ? "border-brand-light/60 bg-brand-light/15 text-brand-light" : "border-white/15 bg-white/5 text-white"}`}>{p.months}</span>
+                  <div>
+                    <p className="font-display text-xl font-extrabold uppercase tracking-wide">{p.name}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-light">{p.tag}</p>
+                  </div>
                 </div>
+                <div className="mt-6 flex items-start font-display">
+                  <span className="mt-2 text-xl font-extrabold">R$</span>
+                  <span className="text-6xl font-extrabold leading-none tracking-tighter">{p.price}</span>
+                  <span className="mt-1 text-2xl font-extrabold">,{p.cents}</span>
+                </div>
+                <p className="mt-2 text-sm text-white/70">{p.period}</p>
+                <p className="h-5 text-sm font-semibold text-brand-light">{p.perMonth && `R$ ${p.perMonth} por mês`}</p>
+                <ul className="mt-5 grid gap-2.5">
+                  {perks.map((k) => (
+                    <li key={k} className="flex items-center gap-2.5 text-sm text-white/85"><Ico d={I.check} c="h-4 w-4 shrink-0 text-zap" />{k}</li>
+                  ))}
+                </ul>
+                <div className="flex-1" />
+                <ZapButton className={`mt-7 w-full !gap-2 !px-4 !py-3.5 !text-sm ${p.best ? "" : "!bg-white/10 !text-white !shadow-none hover:!bg-zap hover:!text-abyss"}`} msg={`Oi! Quero assinar o plano ${p.name} do PexeMusic (R$${p.price},${p.cents}) 🎵`}>Assinar {p.name}</ZapButton>
               </div>
-              <span className="rounded-full bg-zap/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-zap">Mais vendido</span>
             </div>
-            <div className="mt-8">
-              <span className="rounded-md bg-brand-light px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-abyss">Planos a partir de</span>
-              <div className="mt-3 flex items-end gap-1 font-display">
-                <span className="mb-3 text-3xl font-extrabold">R$</span>
-                <span className="text-8xl font-extrabold leading-none tracking-tighter">{PRICE_FROM}</span>
-                <span className="mb-3 flex flex-col leading-none">
-                  <span className="text-3xl font-extrabold">,00</span>
-                  <span className="mt-1 text-sm font-semibold text-brand-light">por mês</span>
-                </span>
-              </div>
-            </div>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {perks.map((p) => (
-                <li key={p} className="flex items-start gap-2.5 text-sm text-white/85">
-                  <Ico d={I.check} c="mt-0.5 h-4 w-4 shrink-0 text-zap" />{p}
-                </li>
-              ))}
-            </ul>
-            <ZapButton className="mt-9 w-full" msg={`Oi! Quero assinar o PexeMusic a partir de R$${PRICE_FROM}/mês 🎵`}>Assinar pelo WhatsApp</ZapButton>
-            <p className="mt-4 text-center text-xs text-white/40">Atendimento humano · Ativação rápida · Sem complicação</p>
-          </div>
+          ))}
         </div>
+        <p className="reveal mt-8 text-center text-sm text-white/45">Assinatura e ativação pelo WhatsApp · Atendimento humano · Sem complicação</p>
       </div>
     </section>
   );
@@ -497,7 +497,7 @@ function Pricing() {
 function Faq() {
   const q = [
     ["Como eu assino o PexeMusic?", "É só clicar em qualquer botão verde da página. Você cai direto no nosso WhatsApp, escolhe o plano e recebe o acesso rapidinho."],
-    ["Quanto custa?", `Os planos começam em R$${PRICE_FROM} por mês. Também temos opções de período maior com desconto — pergunte no WhatsApp.`],
+    ["Quanto custa?", `Os planos começam em R$${PRICE_FROM} por mês. Também tem trimestral (R$39,90), semestral (R$69,90) e anual (R$150): quanto mais tempo, menos você paga por mês.`],
     ["Funciona sem internet?", "Sim! Você baixa suas músicas e playlists no aparelho e ouve offline, sem gastar dados."],
     ["Em quais aparelhos funciona?", "Celular, computador, tablet e Smart TV. Você usa sua conta nos seus dispositivos."],
     ["Tem anúncio?", "Não. Nenhum. Nem no meio da música, nem entre uma faixa e outra."],
