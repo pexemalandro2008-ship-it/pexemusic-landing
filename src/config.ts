@@ -2,8 +2,12 @@
 export const WHATSAPP_NUMBER = "5518991703108"; // DDI + DDD + número, só dígitos
 export const PRICE_FROM = "15"; // "a partir de R$ X/mês"
 export const INSTAGRAM_URL = ""; // opcional: https://instagram.com/seuperfil
+// Confiança (aparecem no rodapé só se preenchidos — use apenas dados reais)
+export const COMPANY_NAME = ""; // razão social, ex.: "PexeMusic Serviços Digitais LTDA"
+export const COMPANY_CNPJ = ""; // ex.: "00.000.000/0001-00"
+export const APP_STORE_URL = ""; // link do app na Play Store, se existir
 
-export function waLink(msg = "Oi! Vim pelo site e quero conhecer o PexeMusic 🎵") {
+export function waLink(msg = "Oi! Vi o anúncio e quero saber mais sobre o PexeMusic 🎵") {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
 
