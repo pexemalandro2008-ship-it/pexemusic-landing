@@ -167,7 +167,7 @@ export default function Player() {
           <p className="mt-5 max-w-md text-lg text-white/65">
             É assim que o PexeMusic soa: sem propaganda, sem corte, faixa atrás de faixa. Escolha uma e aperte o play.
           </p>
-          <a href={waLink("Oi! Ouvi o player no site e quero assinar o PexeMusic 🎧")} target="_blank" rel="noopener" className="btn-ghost mt-8">
+          <a href={waLink("Oi! Ouvi o player no site e quero saber mais 🎧")} target="_blank" rel="noopener" className="btn-ghost mt-8">
             Quero isso no meu celular →
           </a>
           <p className="mt-6 text-xs text-white/35">Faixas demonstrativas instrumentais. No app você tem milhões de músicas dos seus artistas favoritos.</p>
