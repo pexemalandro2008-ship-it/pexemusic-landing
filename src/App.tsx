@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { PRICE_FROM, media, waLink } from "./config";
+import { APP_STORE_URL, COMPANY_CNPJ, COMPANY_NAME, INSTAGRAM_URL, PRICE_FROM, media, waLink } from "./config";
 import Player, { MEDIA_EVENT, announce } from "./Player";
-import { HorizontalScroll, Parallax, ScrollProgress, WordReveal, useScrollVar } from "./Scroll";
+import { ScrollProgress, useScrollVar } from "./Scroll";
 
 /* ---------- ícones (SVG inline, sem dependência) ---------- */
 const I = {
@@ -125,12 +125,13 @@ function Hero() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ZapButton msg="Oi! Quero assinar o PexeMusic 🎵 Quais são os planos?">
-              Quero o PexeMusic
+            <ZapButton msg="Oi! Vi o anúncio e quero saber mais sobre o PexeMusic 🎵">
+              Tirar dúvidas no WhatsApp
               <span className="absolute inset-0 -z-10 rounded-full bg-zap animate-pulseRing" aria-hidden />
             </ZapButton>
             <a href="#planos" className="btn-ghost">Ver planos <Ico d={I.arrow} c="h-5 w-5" /></a>
           </div>
+          <p className="mt-3 text-sm text-white/55">Atendimento humano · Resposta rápida · Pergunte antes de assinar</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/60">
             <span className="flex items-baseline gap-1.5">
@@ -200,7 +201,7 @@ function Problem() {
           <p className="mt-5 max-w-lg text-lg text-white/65">
             A música boa começa, o refrão chega… e entra propaganda. A internet cai e vem o silêncio. O PexeMusic foi feito pra acabar com isso — por um preço que cabe no bolso.
           </p>
-          <ZapButton className="mt-8" msg="Oi! Cansei de anúncio na música 😅 Quero conhecer o PexeMusic.">Quero ouvir sem interrupção</ZapButton>
+          <ZapButton className="mt-8" msg="Oi! Cansei de anúncio na música 😅 Como funciona o PexeMusic?">Quero ouvir sem interrupção</ZapButton>
         </div>
         <div className="reveal card overflow-hidden">
           <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 border-b border-white/10 px-5 py-4 text-xs font-semibold uppercase tracking-widest text-white/50 sm:px-7">
@@ -221,39 +222,6 @@ function Problem() {
                   <Ico d={pexe ? I.check : I.x} c="h-4 w-4" />
                 </span>
               </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Features() {
-  const f = [
-    [I.note, "Milhões de músicas", "Lançamentos, sertanejo, funk, pop, rock, gospel, internacionais — seus artistas favoritos num lugar só."],
-    [I.cloud, "Ouça offline", "Baixe as playlists e ouça sem internet. No metrô, no avião, no sítio. Sem gastar seu pacote de dados."],
-    [I.devices, "Em todos os dispositivos", "Celular, computador, tablet e Smart TV. Comece no fone e continue na sala."],
-    [I.heart, "Playlists personalizadas", "Foco, treino, relax, viagem. Monte as suas ou descubra mixes feitos pro seu gosto."],
-    [I.noads, "Zero anúncios", "Nada de propaganda cortando o refrão. É play e pronto, do começo ao fim."],
-    [I.chat, "Suporte no WhatsApp", "Dúvida? Fala com gente de verdade, direto no WhatsApp. Resposta rápida e sem robô chato."],
-  ] as const;
-  return (
-    <section id="recursos" className="relative overflow-hidden bg-deep py-24">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-light/50 to-transparent" />
-      <div className="container-x">
-        <div className="reveal mx-auto max-w-2xl text-center">
-          <span className="eyebrow">Recursos</span>
-          <h2 className="h2 mt-5">Tudo que você quer num app de música. <span className="text-grad">Nada do que irrita.</span></h2>
-        </div>
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {f.map(([d, t, p], i) => (
-            <div key={t} className="reveal card group p-7 transition hover:-translate-y-1 hover:border-brand-light/40" style={{ transitionDelay: `${i * 60}ms` }}>
-              <span className="grid h-14 w-14 place-items-center rounded-2xl border border-brand-light/30 bg-brand-light/10 text-brand-light shadow-[0_0_30px_-6px_rgba(63,208,255,.6)] transition group-hover:scale-110">
-                <Ico d={d} c="h-7 w-7" />
-              </span>
-              <h3 className="mt-6 font-display text-xl font-bold">{t}</h3>
-              <p className="mt-2 text-white/60">{p}</p>
             </div>
           ))}
         </div>
@@ -365,46 +333,6 @@ function VideoShowcase() {
   );
 }
 
-function Moments() {
-  const m = [["Foco", "🎧"], ["Treino", "🔥"], ["Relax", "🌊"], ["Viagem", "🚗"]];
-  return (
-    <section className="relative overflow-hidden py-24">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-        <div className="reveal relative">
-          <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-brand/40 to-transparent blur-2xl" aria-hidden />
-          <div className="relative overflow-hidden rounded-[2rem] ring-1 ring-white/10">
-            <Parallax amount={90}>
-              <img src={media("relax.webp")} alt="Mulher relaxando no sofá ouvindo música com fones" loading="lazy" className="aspect-[4/5] w-full scale-110 object-cover" />
-            </Parallax>
-          </div>
-          <div className="card absolute bottom-5 left-5 right-5 flex items-center justify-between bg-abyss/70 p-4 backdrop-blur-xl">
-            <div>
-              <p className="text-xs uppercase tracking-widest text-brand-glow">Playlist · Relax</p>
-              <p className="font-display font-bold">Aperte o play. Respire.</p>
-            </div>
-            <Eq bars={6} />
-          </div>
-        </div>
-        <div className="reveal">
-          <span className="eyebrow">Pra cada momento</span>
-          <h2 className="h2 mt-5">Um momento só seu, <span className="text-grad">no ritmo da música.</span></h2>
-          <p className="mt-5 max-w-lg text-lg text-white/65">
-            Acordou, foi pro trabalho, treinou, deitou no sofá. O PexeMusic tem a trilha certa pra cada parte do seu dia.
-          </p>
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {m.map(([t, e]) => (
-              <div key={t} className="card flex flex-col items-center gap-2 py-5 transition hover:border-brand-light/40">
-                <span className="text-2xl">{e}</span>
-                <span className="font-display text-sm font-semibold">{t}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function HowItWorks() {
   const s = [
     ["Chama no WhatsApp", "Clica no botão verde e manda um oi. A gente responde rapidinho."],
@@ -429,7 +357,7 @@ function HowItWorks() {
           ))}
         </div>
         <div className="reveal mt-12 text-center">
-          <ZapButton msg="Oi! Quero assinar o PexeMusic. Como faço?">Começar agora pelo WhatsApp</ZapButton>
+          <ZapButton msg="Oi! Tenho umas dúvidas sobre o PexeMusic 🎵">Começar agora pelo WhatsApp</ZapButton>
         </div>
       </div>
     </section>
@@ -446,7 +374,7 @@ const PLANS = [
 function Pricing() {
   const perks = ["Acesso completo", "Ouça offline", "Em todos os dispositivos", "Suas playlists"];
   return (
-    <section id="planos" className="grain relative overflow-hidden bg-ocean-glow py-24">
+    <section id="planos" className="grain relative overflow-hidden bg-ocean-glow py-16 sm:py-24">
       <Bubbles />
       <div className="container-x relative">
         <div className="reveal mx-auto max-w-2xl text-center">
@@ -455,7 +383,7 @@ function Pricing() {
           <p className="mt-5 text-lg text-white/65">Todos os planos têm acesso completo, sem anúncio, offline e em todos os seus aparelhos. Quanto mais tempo, menos você paga por mês.</p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 sm:mt-14 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {PLANS.map((p) => (
             <div key={p.name} className="reveal relative">
               {p.best && <div className="absolute -inset-[3px] rounded-[1.9rem] bg-gradient-to-br from-brand-light via-brand to-zap opacity-80 blur-md" aria-hidden />}
@@ -483,18 +411,18 @@ function Pricing() {
                   {p.perMonth && `R$ ${p.perMonth} por mês`}
                   {p.save && <span className="rounded-full bg-zap/15 px-2 py-0.5 text-xs font-extrabold text-zap">Economize R$ {p.save}</span>}
                 </p>
-                <ul className="mt-5 grid gap-2.5">
+                <ul className="mt-5 hidden gap-2.5 sm:grid">
                   {perks.map((k) => (
                     <li key={k} className="flex items-center gap-2.5 text-sm text-white/85"><Ico d={I.check} c="h-4 w-4 shrink-0 text-zap" />{k}</li>
                   ))}
                 </ul>
                 <div className="flex-1" />
-                <ZapButton className={`mt-7 w-full !gap-2 !px-4 !py-3.5 !text-sm ${p.best ? "" : "!bg-white/10 !text-white !shadow-none hover:!bg-zap hover:!text-abyss"}`} plan={p.name} value={Number(`${p.price}.${p.cents}`)} msg={`Oi! Quero assinar o plano ${p.name} do PexeMusic (R$${p.price},${p.cents}) 🎵`}>Assinar {p.name}</ZapButton>
+                <ZapButton className={`mt-7 w-full !gap-2 !px-4 !py-3.5 !text-sm ${p.best ? "" : "!bg-white/10 !text-white !shadow-none hover:!bg-zap hover:!text-abyss"}`} plan={p.name} value={Number(`${p.price}.${p.cents}`)} msg={`Oi! Vi o plano ${p.name} no site. Como funciona? 🎵`}>Assinar {p.name}</ZapButton>
               </div>
             </div>
           ))}
         </div>
-        <p className="reveal mt-8 text-center text-sm text-white/45">Assinatura e ativação pelo WhatsApp · Atendimento humano · Sem complicação</p>
+        <p className="reveal mt-8 text-center text-sm text-white/55">Tocou no botão? Você só abre a conversa — tira suas dúvidas e decide depois. Atendimento humano no WhatsApp.</p>
       </div>
     </section>
   );
@@ -502,6 +430,7 @@ function Pricing() {
 
 function Faq() {
   const q = [
+    ["Chamar no WhatsApp já é assinar?", "Não. Tocar no botão só abre uma conversa com a nossa equipe. Você tira suas dúvidas, escolhe o plano com calma e só assina se quiser."],
     ["Como eu assino o PexeMusic?", "É só clicar em qualquer botão verde da página. Você cai direto no nosso WhatsApp, escolhe o plano e recebe o acesso rapidinho."],
     ["Quanto custa?", `Os planos começam em R$${PRICE_FROM} por mês. Também tem trimestral (R$39,90), semestral (R$77,90) e anual (R$150): quanto mais tempo, menos você paga por mês.`],
     ["Funciona sem internet?", "Sim! Você baixa suas músicas e playlists no aparelho e ouve offline, sem gastar dados."],
@@ -547,7 +476,7 @@ function FinalCta() {
         <h2 className="reveal h2 mx-auto mt-10 max-w-3xl">Mergulhe no som. <span className="text-grad">Seu próximo play começa agora.</span></h2>
         <p className="reveal mx-auto mt-5 max-w-xl text-lg text-white/65">Milhões de músicas, sem anúncio, até offline. A partir de R${PRICE_FROM}/mês.</p>
         <div className="reveal mt-9">
-          <ZapButton msg="Oi! Quero assinar o PexeMusic agora 🎵">Conheça o PexeMusic</ZapButton>
+          <ZapButton msg="Oi! Quero saber mais sobre o PexeMusic 🎵">Conheça o PexeMusic</ZapButton>
         </div>
       </div>
     </section>
@@ -562,8 +491,15 @@ function Footer() {
           <img src={media("logo.webp")} alt="" className="h-7 w-7 rounded-lg" />
           <span>© {new Date().getFullYear()} PexeMusic. Todos os direitos reservados.</span>
         </div>
-        <a href={waLink()} target="_blank" rel="noopener" className="flex items-center gap-2 hover:text-zap">{I.zap("h-4 w-4")} Fale com a gente</a>
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {APP_STORE_URL && <a href={APP_STORE_URL} target="_blank" rel="noopener" className="hover:text-white">Baixar na Play Store</a>}
+          {INSTAGRAM_URL && <a href={INSTAGRAM_URL} target="_blank" rel="noopener" className="hover:text-white">Instagram</a>}
+          <a href={waLink()} target="_blank" rel="noopener" className="flex items-center gap-2 hover:text-zap">{I.zap("h-4 w-4")} Fale com a gente</a>
+        </div>
       </div>
+      {(COMPANY_NAME || COMPANY_CNPJ) && (
+        <p className="container-x mt-4 text-center text-xs text-white/35 sm:text-left">{[COMPANY_NAME, COMPANY_CNPJ && `CNPJ ${COMPANY_CNPJ}`].filter(Boolean).join(" · ")}</p>
+      )}
     </footer>
   );
 }
@@ -590,47 +526,6 @@ function FloatingZap() {
   );
 }
 
-function Genres() {
-  const g = [
-    ["Sertanejo", "🤠", "#f59e0b", "#b45309"],
-    ["Funk", "🔊", "#ec4899", "#7c3aed"],
-    ["Pop", "✨", "#3fd0ff", "#1e7bff"],
-    ["Trap", "🔥", "#ef4444", "#7f1d1d"],
-    ["Pagode", "🥁", "#22c55e", "#0f766e"],
-    ["Gospel", "🙏", "#fde68a", "#d97706"],
-    ["Rock", "🎸", "#64748b", "#0f172a"],
-    ["Eletrônica", "🎧", "#a855f7", "#1e3a8a"],
-    ["MPB", "🌴", "#14b8a6", "#1e7bff"],
-    ["Internacionais", "🌎", "#6366f1", "#0b2a6b"],
-  ];
-  return (
-    <HorizontalScroll
-      count={g.length}
-      header={
-        <div className="max-w-2xl">
-          <span className="eyebrow">Catálogo</span>
-          <h2 className="h2 mt-5">Do modão ao trap. <span className="text-grad">Tem pra todo mundo.</span></h2>
-        </div>
-      }
-    >
-      {g.map(([name, emoji, a, b]) => (
-        <div
-          key={name}
-          className="relative flex h-[300px] w-[230px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl p-6 shadow-2xl ring-1 ring-white/10 sm:h-[360px] sm:w-[280px]"
-          style={{ background: `linear-gradient(150deg, ${a}, ${b})` }}
-        >
-          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" aria-hidden />
-          <span className="text-5xl">{emoji}</span>
-          <div className="relative">
-            <p className="font-display text-3xl font-extrabold drop-shadow">{name}</p>
-            <p className="mt-1 flex items-center gap-2 text-sm font-semibold text-white/80"><Eq bars={3} c="bg-white" /> Playlists liberadas</p>
-          </div>
-        </div>
-      ))}
-    </HorizontalScroll>
-  );
-}
-
 export default function App() {
   useReveal();
   return (
@@ -640,15 +535,11 @@ export default function App() {
       <main>
         <Hero />
         <Marquee />
-        <WordReveal text="Sem anúncio. Sem internet? Sem problema. Só você e a música que você ama." accent={["anúncio", "problema", "música"]} />
+        <Pricing />
+        <HowItWorks />
+        <VideoShowcase />
         <Problem />
         <Player />
-        <Features />
-        <Genres />
-        <VideoShowcase />
-        <Moments />
-        <HowItWorks />
-        <Pricing />
         <Faq />
         <FinalCta />
       </main>
