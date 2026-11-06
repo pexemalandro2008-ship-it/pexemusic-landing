@@ -12,3 +12,6 @@ export function waLink(msg = "Oi! Vi o anúncio e quero saber mais sobre o PexeM
 }
 
 export const media = (file: string) => `${import.meta.env.BASE_URL}media/${file}`;
+
+/** Google Ads: conversão "Clique WhatsApp" (AW-ID/rótulo). Vazio = não envia. */
+export const GOOGLE_ADS_SEND_TO = "";
